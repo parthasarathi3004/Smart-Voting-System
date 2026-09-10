@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const { initDatabase } = require('./services/db');
 
 // Global process error handlers to ensure high availability
@@ -53,6 +54,19 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+// Serve frontend static build in production (e.g. on Render)
+const clientDist = path.join(__dirname, '..', 'client', 'dist');
+if (fs.existsSync(clientDist)) {
+  app.use(express.static(clientDist));
+  app.get('*', (req, res) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
+      return res.status(404).json({ error: 'Endpoint not found' });
+    }
+    res.sendFile(path.join(clientDist, 'index.html'));
+  });
+}
+
 
 // Initialize database & seed data
 initDatabase();

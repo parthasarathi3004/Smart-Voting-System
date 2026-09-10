@@ -192,9 +192,44 @@ npm run server
 npm run client
 ```
 
+
 Now open **`http://localhost:5173`** in your browser!
 
 ---
+
+## ☁️ Deploy on Render
+
+This repository is pre-configured for seamless, single-service deployment on **[Render](https://render.com/)** using the included `render.yaml` blueprint.
+
+### Option 1: One-Click Blueprint Deployment (Fastest)
+1. Fork or push this repository to your GitHub account.
+2. Go to your [Render Dashboard](https://dashboard.render.com/).
+3. Click **New +** ➔ **Blueprint**.
+4. Select your **`Smart-Voting-System`** repository.
+5. Render will automatically detect `render.yaml`, set up the build command (`npm run build`), start command (`npm start`), and configure the Node environment.
+6. Click **Apply**! Your app will be live with a free HTTPS `.onrender.com` URL in minutes.
+
+### Option 2: Manual Web Service Setup on Render
+If you prefer configuring manually in the Render dashboard:
+1. Click **New +** ➔ **Web Service**.
+2. Connect your GitHub repository.
+3. Configure the following settings:
+   - **Name:** `smart-voting-system`
+   - **Language / Runtime:** `Node`
+   - **Branch:** `main`
+   - **Build Command:** `npm run build`
+   - **Start Command:** `npm start`
+   - **Instance Type:** `Free`
+4. Add the following **Environment Variables**:
+   - `NODE_ENV` = `production`
+   - `ADMIN_USERNAME` = `parthasarathi`
+   - `ADMIN_PASSWORD` = `gvtvote@123` *(or your custom password)*
+   - `FAST2SMS_API_KEY` = *(Optional: your SMS API key for live mobile OTP)*
+   - `TWOFACTOR_API_KEY` = *(Optional: your 2Factor API key)*
+5. Click **Create Web Service**!
+
+---
+
 
 ## 📡 API Documentation
 
