@@ -5,6 +5,7 @@
   "scripts": {
     "build": "npm install --prefix server && npm install --prefix client --include=dev && npm run --prefix client build",
     "start": "node server/server.js",
+    "zstart": "node server/server.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "npm --prefix server start",
     "client": "npm --prefix client run dev",
