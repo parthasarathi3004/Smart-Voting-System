@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-obsidian text-slate-100 antialiased selection:bg-cyber-cyan selection:text-black;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    background-color: #0a0b10;
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.12) 0%, transparent 60%),
+      radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+      linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+    min-height: 100vh;
+  }
+}
+
+.glass-panel {
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.glass-card {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow: 0 12px 30px -10px rgba(6, 182, 212, 0.2);
+}
+
+.cyber-btn-cyan {
+  @apply relative overflow-hidden font-medium rounded-lg px-5 py-2.5 transition-all duration-200 text-black bg-cyber-cyan hover:bg-cyber-cyanLight hover:scale-[1.03] active:scale-[0.98] shadow-lg shadow-cyber-cyan/25 flex items-center justify-center gap-2;
+}
+
+.cyber-btn-emerald {
+  @apply relative overflow-hidden font-medium rounded-lg px-5 py-2.5 transition-all duration-200 text-black bg-cyber-emerald hover:bg-cyber-emeraldLight hover:scale-[1.03] active:scale-[0.98] shadow-lg shadow-cyber-emerald/25 flex items-center justify-center gap-2;
+}
+
+.cyber-btn-glass {
+  @apply relative overflow-hidden font-medium rounded-lg px-5 py-2.5 transition-all duration-200 text-slate-200 bg-navy-800/80 hover:bg-navy-700/80 border border-white/10 hover:border-cyber-cyan/50 hover:scale-[1.03] active:scale-[0.98] flex items-center justify-center gap-2;
+}
+
+.cyber-btn-crimson {
+  @apply relative overflow-hidden font-medium rounded-lg px-5 py-2.5 transition-all duration-200 text-white bg-cyber-crimson hover:bg-red-500 hover:scale-[1.03] active:scale-[0.98] shadow-lg shadow-red-500/25 flex items-center justify-center gap-2;
+}
+
+/* Custom cyber scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0b10;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #06b6d4;
+}

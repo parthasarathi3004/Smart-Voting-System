@@ -1,0 +1,18 @@
+{
+  "name": "election-server",
+  "version": "1.0.0",
+  "description": "Biometric-Secured Anti-Fraud E-Voting Platform REST API Backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.16",
+    "xlsx": "^0.18.5"
+  }
+}
