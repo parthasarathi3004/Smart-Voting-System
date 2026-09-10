@@ -2,6 +2,7 @@
   "name": "biometric-evoting-platform",
   "version": "1.0.0",
   "description": "Production-Grade Biometric-Secured Anti-Fraud E-Voting & Analytics Platform",
+  "homepage": "https://smart-voting-system-wyty.onrender.com/",
   "scripts": {
     "build": "npm install --prefix server && npm install --prefix client --include=dev && npm run --prefix client build",
     "start": "node server/server.js",

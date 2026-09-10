@@ -3,13 +3,18 @@
 # 🗳️ Smart Voting System (Voting_SM)
 ### *Next-Gen Biometric-Secured Anti-Fraud E-Voting & Real-Time Analytics Platform*
 
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-onrender.com-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://smart-voting-system-wyty.onrender.com/)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Express.js](https://img.shields.io/badge/Express.js-4.21-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](http://makeapullrequest.com)
+
+<br/>
+
+### 🔗 **Live Application URL:**
+### 👉 [https://smart-voting-system-wyty.onrender.com/](https://smart-voting-system-wyty.onrender.com/) 👈
 
 <br/>
 
@@ -17,7 +22,7 @@
 
 <br/>
 
-[Key Features](#-key-features) • [Workflow & Security](#-security--biometric-workflow) • [Tech Stack](#-technology-stack) • [Quick Start](#-quick-start-guide) • [API Reference](#-api-documentation) • [Screens & Portals](#-portal-walkthrough)
+[🌐 Live Demo](https://smart-voting-system-wyty.onrender.com/) • [Key Features](#-key-features) • [Workflow & Security](#-security--biometric-workflow) • [Tech Stack](#-technology-stack) • [Quick Start](#-quick-start-guide) • [API Reference](#-api-documentation) • [Screens & Portals](#-portal-walkthrough)
 
 ---
 
@@ -198,6 +203,8 @@ Now open **`http://localhost:5173`** in your browser!
 ---
 
 ## ☁️ Deploy on Render
+
+> 🚀 **Live Production Deployment:** [https://smart-voting-system-wyty.onrender.com/](https://smart-voting-system-wyty.onrender.com/)
 
 This repository is pre-configured for seamless, single-service deployment on **[Render](https://render.com/)** using the included `render.yaml` blueprint.
 
