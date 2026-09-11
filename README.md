@@ -18,7 +18,7 @@
 
 <br/>
 
-> **A high-security, tamper-resistant digital voting solution featuring real-time webcam facial biometrics, two-factor OTP authentication, cryptographic single-vote ledgers, and comprehensive coverage across all 234 Assembly Constituencies of Tamil Nadu.**
+> **A high-security, tamper-resistant digital voting platform featuring real-time webcam facial biometric authentication, anti-fraud single-vote verification, cryptographic audit ledgers, and comprehensive coverage across all 234 Assembly Constituencies of Tamil Nadu.**
 
 <br/>
 
@@ -40,9 +40,10 @@ Modeled for large-scale elections like the **Tamil Nadu Legislative Assembly Gen
 
 | Feature | Description |
 | :--- | :--- |
-| 👁️ **Facial Biometric Recognition** | Real-time live camera capture, facial descriptor extraction, anti-spoofing validation, and instant facial verification at the voting booth. |
-| 🛡️ **Cryptographic Anti-Fraud Ledger** | Immutable audit trail (`votesAudit`) preventing double voting, proxy voting, and unauthorized ballot injection. |
-| 🗳️ **Digital EVM Voting Booth** | Clean, accessible touch interface displaying candidates, high-resolution party symbols, photo verification, and NOTA support with celebratory confetti feedback. |
+| 👁️ **Live Facial Biometric Verification** | Real-time webcam capture, facial descriptor extraction, anti-spoofing validation, and instant facial recognition matching against the registered electoral database. |
+| 🚫 **Duplicate Vote Prevention** | Real-time eligibility and `hasVoted` state checks that immediately lock the voting booth and raise security alerts if a voter attempts double voting. |
+| 🗳️ **Constituency-Locked EVM Ballot** | Dynamic EVM touch interface showing candidates exclusively for the voter's registered constituency, with high-resolution party symbols, photo verification, and NOTA support. |
+| 🛡️ **Cryptographic Anti-Fraud Ledger** | Immutable audit trail (`votesAudit`) with decoupled voter identities to guarantee confidential yet verifiable ballot recording. |
 | 🏛️ **All 234 TN Constituencies Covered** | Full dataset mapping of Tamil Nadu's 38 districts and 234 legislative assembly seats, with automated Excel/JSON ingestion. |
 | 📊 **Executive Analytics Center** | Live Recharts dashboard tracking seat tallies, vote share percentages, voter turnout metrics, and demographic trends. |
 | 🔒 **Admin Session Guard** | Automatic session revocation on tab exit or navigation away from administrative workspaces, ensuring zero officer credential hijacking. |
@@ -56,42 +57,40 @@ Modeled for large-scale elections like the **Tamil Nadu Legislative Assembly Gen
 sequenceDiagram
     autonumber
     actor Voter
-    participant Web as Voter Booth (Client)
-    participant API as Election Backend (Node/Express)
+    participant Booth as Voter Booth (Client)
+    participant API as Backend API (Node/Express)
     participant Bio as Biometric Engine
-    participant SMS as SMS Gateway
-    participant DB as Electoral Ledger
+    participant Ledger as Electoral State & Audit Ledger
 
-    Voter->>Web: Enter Voter ID (EPIC) & Aadhaar
-    Web->>API: Fetch voter profile & check status
-    API-->>Web: Voter verified (Has not voted)
-   
-    rect rgb(20, 30, 50)
-        Note over Voter,Bio: Step 1: Biometric Verification
-        Voter->>Web: Face Camera Scan
-        Web->>API: Transmit Live Snapshot (Base64)
-        API->>Bio: Compare Facial Descriptor Embeddings
-        Bio-->>API: Facial Match Verified (Confidence >= 85%)
+    Note over Voter,Booth: Step 1: Live Facial Biometric Scan
+    Voter->>Booth: Step in front of CyberWebcam
+    Booth->>Booth: Capture live face & compute descriptor vector
+    Booth->>API: POST /api/voters/verify-face (faceSignature + descriptor)
+    
+    API->>Bio: Compare facial descriptor with registered voters
+    Bio-->>API: Match confirmed (Confidence >= 85%) & return voter profile
+
+    Note over API,Ledger: Step 2: Anti-Fraud Duplicate Vote Check
+    API->>Ledger: Check voter eligibility & hasVoted status
+    alt Voter already voted (hasVoted == true)
+        API-->>Booth: Duplicate Vote Detected (Security Alert & Locked)
+    else Voter eligible (hasVoted == false)
+        API-->>Booth: Identity verified & booth unlocked
     end
 
-    rect rgb(30, 45, 30)
-        Note over Voter,SMS: Step 2: 2FA Mobile OTP
-        API->>SMS: Dispatch 6-digit Secure OTP
-        SMS-->>Voter: Deliver SMS to Registered Phone
-        Voter->>Web: Enter Received OTP
-        Web->>API: Validate OTP
-        API-->>Web: 2FA Session Authorized
-    end
+    Note over Voter,Ledger: Step 3: Digital EVM Ballot & Vote Cast
+    Booth->>API: GET /api/candidates?constituency={constituency}
+    API-->>Booth: Return candidates for voter's constituency
+    Booth->>Voter: Render EVM ballot (Candidate photos, symbols, NOTA)
+    Voter->>Booth: Select candidate & confirm ballot
+    Booth->>API: POST /api/vote/cast (voterId, candidateId)
 
-    rect rgb(50, 30, 30)
-        Note over Voter,DB: Step 3: Confidential Ballot
-        Web->>Voter: Render Digital Ballot (Candidates of Constituency)
-        Voter->>Web: Cast Ballot for Selected Candidate / NOTA
-        Web->>API: Submit Encrypted Vote Payload
-        API->>DB: Record Anonymous Vote & Mark Voter as "Voted"
-        API->>DB: Append to Tamper-Proof Audit Trail
-        API-->>Web: Confirmation + Digital Receipt Generated
-    end
+    Note over API,Ledger: Step 4: Anonymous Ledger & Receipt
+    API->>Ledger: Decouple voter ID & increment candidate vote count
+    API->>Ledger: Set voter hasVoted: true with timestamp
+    API->>Ledger: Record entry in immutable votesAudit ledger
+    API-->>Booth: Vote successful + digital receipt
+    Booth-->>Voter: Confetti celebration & confirmation receipt
 ```
 
 ---
@@ -121,7 +120,7 @@ sequenceDiagram
 Smart-Voting-System
 │
 ├── 🌐 Public Landing Page          ➜ Role selector (Voter Booth vs Election Officer)
-├── 🗳️ Voter Portal (/voter)         ➜ 2FA Face scan, OTP check & electronic ballot
+├── 🗳️ Voter Portal (/voter)         ➜ Live facial biometric authentication & digital EVM ballot
 ├── 🔐 Admin Login (/admin/login)    ➜ High-security credential portal with session lock
 ├── 📊 Admin Command (/admin/dashboard) ➜ Turnout stats, fraud detection logs & status controls
 ├── 👤 Voter Registration            ➜ Biometric webcam enrollment, Aadhaar & EPIC linking
@@ -172,10 +171,6 @@ Edit `server/.env` to configure your credentials:
 ```env
 PORT=5000
 NODE_ENV=development
-
-# SMS Gateway Integration (Fast2SMS or 2Factor)
-FAST2SMS_API_KEY=your_fast2sms_api_key_here
-TWOFACTOR_API_KEY=your_2factor_api_key_here
 
 # Admin Credentials
 ADMIN_USERNAME=parthasarathi
@@ -230,8 +225,6 @@ If you prefer configuring manually in the Render dashboard:
    - `NODE_ENV` = `production`
    - `ADMIN_USERNAME` = `parthasarathi`
    - `ADMIN_PASSWORD` = `gvtvote@123` *(or your custom password)*
-   - `FAST2SMS_API_KEY` = *(Optional: your SMS API key for live mobile OTP)*
-   - `TWOFACTOR_API_KEY` = *(Optional: your 2Factor API key)*
 5. Click **Create Web Service**!
 
 ---
@@ -247,7 +240,7 @@ The backend exposes structured RESTful endpoints:
 | `POST` | `/api/auth/login` | Authenticate election officer |
 | `GET` | `/api/voters` | Retrieve registered voters list |
 | `POST` | `/api/voters/register` | Enroll new voter with biometric face snapshot |
-| `POST` | `/api/voters/verify` | Authenticate voter via biometric face snapshot & OTP |
+| `POST` | `/api/voters/verify-face` | Authenticate voter via live biometric face scan & descriptor |
 | `GET` | `/api/candidates` | Get candidates filtered by district / constituency |
 | `POST` | `/api/candidates` | Create or update candidate profile and symbol |
 | `POST` | `/api/vote/cast` | Submit confidential ballot to ledger |
@@ -269,7 +262,7 @@ Voting_SM/
 │   │   ├── components/                   # Navbar, HelpDesk modal, UI widgets
 │   │   ├── pages/
 │   │   │   ├── LandingPage.jsx           # Portal homepage
-│   │   │   ├── VoterBooth.jsx            # Biometric 2FA digital voting booth
+│   │   │   ├── VoterBooth.jsx            # Biometric digital EVM voting booth
 │   │   │   ├── AdminLogin.jsx            # Secure officer authentication
 │   │   │   ├── AdminDashboard.jsx        # Command center & fraud alerts
 │   │   │   ├── VoterRegistration.jsx     # Voter enrollment & photo capture
@@ -289,11 +282,9 @@ Voting_SM/
 │   │   ├── vote.js                       # Cast ballot & audit ledger recording
 │   │   ├── election.js                   # Election session and window controls
 │   │   ├── analytics.js                  # Statistical calculation engine
-│   │   ├── support.js                    # HelpDesk tickets & email dispatch
-│   │   └── smsConfig.js                  # SMS OTP gateway provider settings
+│   │   └── support.js                    # HelpDesk tickets & email dispatch
 │   ├── services/
 │   │   ├── biometrics.js                 # Face descriptor comparison & verification
-│   │   ├── otpService.js                 # Secure OTP generator & SMS dispatcher
 │   │   ├── mailer.js                     # Nodemailer email notification service
 │   │   ├── analyticsEngine.js            # Turnout and swing calculator
 │   │   └── db.js                         # In-memory database with persistent sync
