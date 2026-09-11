@@ -41,7 +41,6 @@ Modeled for large-scale elections like the **Tamil Nadu Legislative Assembly Gen
 | Feature | Description |
 | :--- | :--- |
 | 👁️ **Facial Biometric Recognition** | Real-time live camera capture, facial descriptor extraction, anti-spoofing validation, and instant facial verification at the voting booth. |
-| 📱 **Two-Factor OTP Verification** | Instant SMS OTP dispatched to the voter's registered mobile number via Fast2SMS / 2Factor APIs for zero-trust identity confirmation. |
 | 🛡️ **Cryptographic Anti-Fraud Ledger** | Immutable audit trail (`votesAudit`) preventing double voting, proxy voting, and unauthorized ballot injection. |
 | 🗳️ **Digital EVM Voting Booth** | Clean, accessible touch interface displaying candidates, high-resolution party symbols, photo verification, and NOTA support with celebratory confetti feedback. |
 | 🏛️ **All 234 TN Constituencies Covered** | Full dataset mapping of Tamil Nadu's 38 districts and 234 legislative assembly seats, with automated Excel/JSON ingestion. |
