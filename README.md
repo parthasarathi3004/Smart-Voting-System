@@ -18,7 +18,7 @@
 
 <br/>
 
-> **A high-security, tamper-resistant digital voting solution featuring real-time webcam facial biometrics, cryptographic single-vote ledgers, and comprehensive coverage across all 234 Assembly Constituencies of Tamil Nadu.**
+> **A high-security, tamper-resistant digital voting solution featuring real-time webcam facial biometrics, two-factor OTP authentication, cryptographic single-vote ledgers, and comprehensive coverage across all 234 Assembly Constituencies of Tamil Nadu.**
 
 <br/>
 
@@ -41,6 +41,7 @@ Modeled for large-scale elections like the **Tamil Nadu Legislative Assembly Gen
 | Feature | Description |
 | :--- | :--- |
 | 👁️ **Facial Biometric Recognition** | Real-time live camera capture, facial descriptor extraction, anti-spoofing validation, and instant facial verification at the voting booth. |
+| 📱 **Two-Factor OTP Verification** | Instant SMS OTP dispatched to the voter's registered mobile number via Fast2SMS / 2Factor APIs for zero-trust identity confirmation. |
 | 🛡️ **Cryptographic Anti-Fraud Ledger** | Immutable audit trail (`votesAudit`) preventing double voting, proxy voting, and unauthorized ballot injection. |
 | 🗳️ **Digital EVM Voting Booth** | Clean, accessible touch interface displaying candidates, high-resolution party symbols, photo verification, and NOTA support with celebratory confetti feedback. |
 | 🏛️ **All 234 TN Constituencies Covered** | Full dataset mapping of Tamil Nadu's 38 districts and 234 legislative assembly seats, with automated Excel/JSON ingestion. |
@@ -59,12 +60,13 @@ sequenceDiagram
     participant Web as Voter Booth (Client)
     participant API as Election Backend (Node/Express)
     participant Bio as Biometric Engine
+    participant SMS as SMS Gateway
     participant DB as Electoral Ledger
 
     Voter->>Web: Enter Voter ID (EPIC) & Aadhaar
     Web->>API: Fetch voter profile & check status
     API-->>Web: Voter verified (Has not voted)
-    
+   
     rect rgb(20, 30, 50)
         Note over Voter,Bio: Step 1: Biometric Verification
         Voter->>Web: Face Camera Scan
@@ -73,8 +75,17 @@ sequenceDiagram
         Bio-->>API: Facial Match Verified (Confidence >= 85%)
     end
 
+    rect rgb(30, 45, 30)
+        Note over Voter,SMS: Step 2: 2FA Mobile OTP
+        API->>SMS: Dispatch 6-digit Secure OTP
+        SMS-->>Voter: Deliver SMS to Registered Phone
+        Voter->>Web: Enter Received OTP
+        Web->>API: Validate OTP
+        API-->>Web: 2FA Session Authorized
+    end
+
     rect rgb(50, 30, 30)
-        Note over Voter,DB: Step 2: Confidential Ballot
+        Note over Voter,DB: Step 3: Confidential Ballot
         Web->>Voter: Render Digital Ballot (Candidates of Constituency)
         Voter->>Web: Cast Ballot for Selected Candidate / NOTA
         Web->>API: Submit Encrypted Vote Payload
@@ -82,6 +93,10 @@ sequenceDiagram
         API->>DB: Append to Tamper-Proof Audit Trail
         API-->>Web: Confirmation + Digital Receipt Generated
     end
+```
+
+---
+
 ## 🛠️ Technology Stack
 
 ### **Frontend Client**
